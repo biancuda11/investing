@@ -30,9 +30,24 @@ def save_sp500_tickers():
     print(len(tickers))
     return tickers
 
+def save_nasdaq_tickers():
+    resp = requests.get('https://en.wikipedia.org/wiki/NASDAQ-100')
+    soup = bs.BeautifulSoup(resp.text, "lxml")
+    table = soup.find('table', {'id': 'constituents'})
+    nasdaq_tickers = []
+    for row in table.findAll('tr')[1:]:
+        ticker = row.findAll('td')[1].text
+        ticker = ticker.replace('\n', '')
+        nasdaq_tickers.append(ticker)
+
+    with open("nasdaq_tickers.pickle", "wb") as f :
+        pickle.dump(nasdaq_tickers, f)
+
+    print(len(nasdaq_tickers))
+    return nasdaq_tickers
 # save_sp500_tickers()
 
-def get_data_from_yahoo(reload_sp500=False):
+def get__sp500_data_from_yahoo(reload_sp500=False):
     if reload_sp500:
         tickers = save_sp500_tickers()
     else:
@@ -64,35 +79,37 @@ def get_data_from_yahoo(reload_sp500=False):
         else:
             print('Already have {}'.format(ticker))
 
-# get_data_from_yahoo()
+def get__NASDAQ_data_from_yahoo(reload_Nasdaq=False):
+    if reload_Nasdaq:
+        tickers = save_nasdaq_tickers()
+    else:
+        with open("nasdaq_tickers.pickle", "rb") as f:
+            tickers = pickle.load(f)
 
-def compile_data_fat():
-    with open("sp500_tickers.pickle", "rb") as f:
-        tickers = pickle.load(f)
+    if not os.path.exists('stock_dfs'):
+        os.makedirs('stock_dfs')
 
-    main_df = pd.DataFrame()
+    start = begin
+    end = today
 
-    for count,ticker in enumerate(tickers):
-        try:
-            df = pd.read_csv('stock_dfs/{}.csv'.format(ticker))
-            df.set_index('Date', inplace=True)
+    bad_tickers = []
 
-            df.rename(columns = {'Adj Close': ticker}, inplace=True)
-            df.drop(['Open', 'High', 'Low', 'Close', 'Volume'], 1, inplace=True)
+    for ticker in tickers:
+        print(ticker + '\n')
+        if not os.path.exists('stock_dfs/{}.csv'.format(ticker)):
+            try:
+                df = web.DataReader(ticker , 'yahoo', start, end)
+                df['50ma'] = df['Adj Close'].rolling(window=50, min_periods=0).mean()
+                df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean()
+                df['200ma'] = df['Adj Close'].rolling(window=200, min_periods=0).mean()
+                df['Symbol'] = ticker
+                df.to_csv('stock_dfs/{}.csv'.format(ticker))
+            except Exception as e:
+                 print(f'Bad Ticker: {ticker}')
+                 bad_tickers.append(ticker)
 
-            if main_df.empty:
-                main_df = df
-            else:
-                main_df = main_df.join(df, how='outer')
-
-            if count % 10 == 0:
-                print(count)
-
-        except Exception as e:
-            print('bad df')
-
-    print(main_df.head())
-    main_df.to_csv('sp500_joined_closes.csv')
+        else:
+            print('Already have {}'.format(ticker))
 
 def compile_data_long():
     path = 'C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/stock_dfs'
@@ -173,8 +190,12 @@ def group_and_calculate():
     df.to_csv('detected_crosses_in_moving_avg.csv', encoding='utf-8', index=False)
 
     print(df.Narrative)
+
+
+# save_nasdaq_tickers()
 #
-# get_data_from_yahoo()
+# get__sp500_data_from_yahoo()
+# get__NASDAQ_data_from_yahoo()
 # print('============')
 # compile_data_long()
 # print('============')
@@ -183,3 +204,34 @@ print('DONE')
 print('============')
 # compile_data_fat()
 # save_sp500_tickers()
+
+
+# get_data_from_yahoo()
+
+def compile_data_fat():
+    with open("sp500_tickers.pickle", "rb") as f:
+        tickers = pickle.load(f)
+
+    main_df = pd.DataFrame()
+
+    for count,ticker in enumerate(tickers):
+        try:
+            df = pd.read_csv('stock_dfs/{}.csv'.format(ticker))
+            df.set_index('Date', inplace=True)
+
+            df.rename(columns = {'Adj Close': ticker}, inplace=True)
+            df.drop(['Open', 'High', 'Low', 'Close', 'Volume'], 1, inplace=True)
+
+            if main_df.empty:
+                main_df = df
+            else:
+                main_df = main_df.join(df, how='outer')
+
+            if count % 10 == 0:
+                print(count)
+
+        except Exception as e:
+            print('bad df')
+
+    print(main_df.head())
+    main_df.to_csv('sp500_joined_closes.csv')
