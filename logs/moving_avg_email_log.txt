@@ -1,0 +1,28 @@
+============
+2019-12-31 06:51:54,711: Log: INFO, GMAIL connection Success
+2019-12-31 06:51:54,739: Log: INFO, Close Connection Success
+============
+2019-12-31 06:58:56,978: Log: INFO, GMAIL connection Success
+2019-12-31 06:58:57,530: Log: INFO, Close Connection Success
+============
+2019-12-31 07:00:44,806: Log: INFO, GMAIL connection Success
+2019-12-31 07:00:45,278: Log: INFO, Close Connection Success
+============
+2019-12-31 07:00:56,246: Log: INFO, GMAIL connection Success
+2019-12-31 07:00:56,727: Log: INFO, Close Connection Success
+============
+2019-12-31 07:03:29,980: Log: INFO, GMAIL connection Success
+2019-12-31 07:03:30,537: Log: INFO, SUCCESS
+2019-12-31 07:03:30,558: Log: INFO, Close Connection Success
+============
+2019-12-31 07:13:04,014: Log: INFO, GMAIL connection Success
+2019-12-31 07:13:04,763: Log: INFO, SUCCESS
+2019-12-31 07:13:04,815: Log: INFO, Close Connection Success
+============
+2019-12-31 07:15:35,611: Log: INFO, GMAIL connection Success
+2019-12-31 07:15:35,615: Log: ERROR, FAILURE
+2019-12-31 07:15:35,635: Log: INFO, Close Connection Success
+============
+2019-12-31 07:16:06,439: Log: INFO, GMAIL connection Success
+2019-12-31 07:16:07,027: Log: INFO, SUCCESS
+2019-12-31 07:16:07,055: Log: INFO, Close Connection Success

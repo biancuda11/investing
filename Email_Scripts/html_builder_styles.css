@@ -1,0 +1,61 @@
+body {
+  font-family: sans-serif;
+}
+table {
+  border-spacing: 0;
+  font-size: small;
+}
+th {
+  color: white;
+  background-color: black;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+td:first-child {
+  border-left: 1px solid black;
+}
+td {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.pointer {
+  cursor: pointer;
+}
+.default {
+  cursor: default;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+.good {
+  background-color: rgb(198, 239, 206);
+  color: rgb(0, 97, 0);
+}
+.neutral {
+  background-color: rgb(255, 235, 156);
+  color: rgb(156, 101, 0);
+}
+.bad {
+  background-color: rgb(255, 199, 206);
+  color: rgb(156, 0, 6);
+}
+.note {
+  background-color: rgb(255, 255, 204);
+}
+.bold {
+  font-weight: bold;
+}
+.underline {
+  text-decoration: underline;
+}
+.strike {
+  text-decoration: line-through;
+}
+.italic {
+  font-style: italic;
+}
