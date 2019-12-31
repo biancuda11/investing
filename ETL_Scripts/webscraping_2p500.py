@@ -130,6 +130,8 @@ def group_and_calculate():
 
     print(df)
 
+    df['Indicator'] = 'N/A'
+
     insert_index = 0
 
     for i, row in df.iterrows():
@@ -141,6 +143,7 @@ def group_and_calculate():
             continue
         else:
             if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, 11]:
+                df.loc[i, 'Indicator'] = 'Flash'
                 print('Yahoo', row['Symbol'])
 
         insert_index += 1
@@ -150,8 +153,26 @@ def group_and_calculate():
         # if same_symbol and not changed_status:
         #     print(row['Symbol'])
 
-
     df.to_csv('grouped_df.csv', index=False, encoding='utf-8')
+
+    df = df.loc[df.Indicator == 'Flash']
+
+    def classify(row):
+
+        template = '50 Day ({fifty}) now {above_below} 100 day ({hundred}) {indicator} Indicator, {rating} Rating'
+
+        if row['Buy_Sell'] == 'BUY':
+            return template.format(fifty=row['50ma'], hundred=row['100ma'], above_below='above', indicator='BULLISH', rating='BUY')
+        elif row['Buy_Sell'] == 'SELL':
+            return template.format(fifty=row['50ma'], hundred=row['100ma'], above_below='below', indicator='BEARISH', rating='SELL')
+        else:
+            return '## ERROR ##'
+
+    df['Narrative'] = df.apply(classify, axis=1)
+
+    df.to_csv('detected_crosses_in_moving_avg.csv', encoding='utf-8', index=False)
+
+    print(df.Narrative)
 #
 # get_data_from_yahoo()
 # print('============')
