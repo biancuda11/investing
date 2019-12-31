@@ -12,14 +12,24 @@ to_list = ['AlohaAlerts11@gmail.com']
 cc_list = ['AlohaAlerts11@gmail.com']
 bcc_list = list(df_receivers.Email.unique())
 
-print(to_list)
+classes = {
+    'Symbol': 'bold',
+}
+
+custom_styles = 'th{background-color: #22767C;}'
+
+html_table = make_table(df, col_classes=classes, columns=['Symbol', 'Narrative'], styles=custom_styles)
+
+html = open("./html_files/Moving_Average_trigger.html", "r").read()
+
+html_formatted = html.format(name='Dan', table=html_table)
 
 s, logger, log_capture_string = sendemail.open_conn()
 
 print(s)
 print(logger)
 
-# result = sendemail.send_moving_average_email('text', 'testing', s, logger, log_capture_string, to_list, cc_list , bcc_list, 'test subject')
+result = sendemail.send_moving_average_email('text', html_formatted, s, logger, log_capture_string, to_list, cc_list , bcc_list, 'test subject')
 
 print(result)
 

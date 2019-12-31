@@ -137,7 +137,7 @@ def make_table(df, **kwargs):
 
 
     if default_styles:
-        css_string = open("C:/Socrata/hdot-scripts/Python/modules/html_builder_styles.css", "r").read()
+        css_string = open("C:/Users/us52873/Documents/Personal/investing/Email_Scripts/html_builder_styles.css", "r").read()
     else:
         css_string = ''
 
