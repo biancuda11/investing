@@ -11,9 +11,6 @@ from datetime import timedelta
 today = dt.datetime.today().date()
 begin = today - timedelta(days=365)
 
-print(today)
-print(begin)
-
 def save_sp500_tickers():
     resp = requests.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     soup = bs.BeautifulSoup(resp.text, "lxml")
@@ -145,8 +142,6 @@ def group_and_calculate():
 
     df = df.sort_values(['Symbol', 'Date'], ascending=True)
 
-    print(df)
-
     df['Indicator'] = 'N/A'
 
     insert_index = 0
@@ -161,7 +156,7 @@ def group_and_calculate():
         else:
             if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, 11]:
                 df.loc[i, 'Indicator'] = 'Flash'
-                print('Yahoo', row['Symbol'])
+                print('Crossover Detected: ',row['Symbol'])
 
         insert_index += 1
         # same_symbol = row['Symbol'] == df.iloc[i-1]
@@ -189,19 +184,14 @@ def group_and_calculate():
 
     df.to_csv('detected_crosses_in_moving_avg.csv', encoding='utf-8', index=False)
 
-    print(df.Narrative)
-
-
 # save_nasdaq_tickers()
 #
 # get__sp500_data_from_yahoo()
 # get__NASDAQ_data_from_yahoo()
 # print('============')
-compile_data_long()
+# compile_data_long()
 # print('============')
-group_and_calculate()
-print('DONE')
-print('============')
+# group_and_calculate()
 # compile_data_fat()
 # save_sp500_tickers()
 

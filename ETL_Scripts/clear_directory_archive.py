@@ -8,7 +8,7 @@ dest1 = 'C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/archived/'
 
 date = str(dt.datetime.today().date())
 
-print(date)
+print('current date ', date)
 
 files = os.listdir(source)
 
@@ -17,4 +17,5 @@ for f in files:
     print(ticker)
     shutil.move(source+f, dest1 + ticker + date +'.csv')
 
-print('DONE: Files moved ====== ')
+print('DONE: Files moved')
+print('===========')

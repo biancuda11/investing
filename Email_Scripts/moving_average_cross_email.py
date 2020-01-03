@@ -21,7 +21,7 @@ classes = {
 
 custom_styles = 'th{background-color: #22767C;}'
 
-html_table = make_table(df, col_classes=classes, columns=['Symbol', 'Narrative'], styles=custom_styles)
+html_table = make_table(df, col_classes=classes, columns=['Symbol', 'Buy_Sell' 'Narrative'], styles=custom_styles)
 
 html_table_transform = transform(html_table)
 
