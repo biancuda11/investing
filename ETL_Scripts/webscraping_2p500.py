@@ -197,16 +197,13 @@ def group_and_calculate():
 # get__sp500_data_from_yahoo()
 # get__NASDAQ_data_from_yahoo()
 # print('============')
-# compile_data_long()
+compile_data_long()
 # print('============')
 group_and_calculate()
 print('DONE')
 print('============')
 # compile_data_fat()
 # save_sp500_tickers()
-
-
-# get_data_from_yahoo()
 
 def compile_data_fat():
     with open("sp500_tickers.pickle", "rb") as f:
