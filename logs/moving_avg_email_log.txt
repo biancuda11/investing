@@ -46,3 +46,7 @@
 2020-01-03 15:52:32,204: Log: INFO, GMAIL connection Success
 2020-01-03 15:52:34,127: Log: INFO, SUCCESS
 2020-01-03 15:52:34,225: Log: INFO, Close Connection Success
+============
+2020-01-03 22:11:20,450: Log: INFO, GMAIL connection Success
+2020-01-03 22:11:21,959: Log: INFO, SUCCESS
+2020-01-03 22:11:22,042: Log: INFO, Close Connection Success

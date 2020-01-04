@@ -96,9 +96,9 @@ def get__NASDAQ_data_from_yahoo(reload_Nasdaq=False):
         if not os.path.exists('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/{}.csv'.format(ticker)):
             try:
                 df = web.DataReader(ticker , 'yahoo', start, end)
-                df['50ma'] = df['Adj Close'].rolling(window=50, min_periods=0).mean().round(2)
-                df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean().round(2)
-                df['200ma'] = df['Adj Close'].rolling(window=200, min_periods=0).mean().round(2)
+                df['50ma'] = df['Adj Close'].rolling(window=50, min_periods=0).mean()
+                df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean()
+                df['200ma'] = df['Adj Close'].rolling(window=200, min_periods=0).mean()
                 df['Symbol'] = ticker
                 df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/{}.csv'.format(ticker))
             except Exception as e:
@@ -171,7 +171,7 @@ def group_and_calculate():
 
     def classify(row):
 
-        template = '50 Day ({fifty}) now {above_below} 100 day ({hundred}) {indicator} Indicator, {rating} Rating'
+        template = '50 Day (${fifty}) now {above_below} 100 day (${hundred}) {indicator} Indicator, {rating} Rating'
 
         if row['Buy_Sell'] == 'BUY':
             return template.format(fifty=row['50ma'], hundred=row['100ma'], above_below='above', indicator='BULLISH', rating='BUY')
