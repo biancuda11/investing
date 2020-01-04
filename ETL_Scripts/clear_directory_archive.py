@@ -3,8 +3,8 @@ import os
 import datetime as dt
 from datetime import datetime
 
-source = 'C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/stock_dfs/'
-dest1 = 'C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/archived/'
+source = 'C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/'
+dest1 = 'C:/Users/us52873/Documents/Personal/investing/data_files/archives/'
 
 date = str(dt.datetime.today().date())
 

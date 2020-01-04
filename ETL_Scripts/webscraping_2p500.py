@@ -21,7 +21,7 @@ def save_sp500_tickers():
         ticker = ticker.replace('\n', '')
         tickers.append(ticker)
 
-    with open("sp500_tickers.pickle", "wb") as f :
+    with open("C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/sp500_tickers.pickle", "wb") as f :
         pickle.dump(tickers, f)
 
     print(len(tickers))
@@ -34,10 +34,10 @@ def save_nasdaq_tickers():
     nasdaq_tickers = []
     for row in table.findAll('tr')[1:]:
         ticker = row.findAll('td')[1].text
-        ticker = ticker.replace('\n', '')
+        ticker = ticker.replace('/n', '')
         nasdaq_tickers.append(ticker)
 
-    with open("nasdaq_tickers.pickle", "wb") as f :
+    with open("C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/nasdaq_tickers.pickle", "wb") as f :
         pickle.dump(nasdaq_tickers, f)
 
     print(len(nasdaq_tickers))
@@ -48,11 +48,11 @@ def get__sp500_data_from_yahoo(reload_sp500=False):
     if reload_sp500:
         tickers = save_sp500_tickers()
     else:
-        with open("sp500_tickers.pickle", "rb") as f:
+        with open("C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/sp500_tickers.pickle", "rb") as f:
             tickers = pickle.load(f)
 
-    if not os.path.exists('stock_dfs'):
-        os.makedirs('stock_dfs')
+    if not os.path.exists('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs'):
+        os.makedirs('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs')
 
     start = begin
     end = today
@@ -61,14 +61,14 @@ def get__sp500_data_from_yahoo(reload_sp500=False):
 
     for ticker in tickers:
         print(ticker + '\n')
-        if not os.path.exists('stock_dfs/{}.csv'.format(ticker)):
+        if not os.path.exists('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/{}.csv'.format(ticker)):
             try:
                 df = web.DataReader(ticker , 'yahoo', start, end)
                 df['50ma'] = df['Adj Close'].rolling(window=50, min_periods=0).mean()
                 df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean()
                 df['200ma'] = df['Adj Close'].rolling(window=200, min_periods=0).mean()
                 df['Symbol'] = ticker
-                df.to_csv('stock_dfs/{}.csv'.format(ticker))
+                df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/{}.csv'.format(ticker))
             except Exception as e:
                  print(f'Bad Ticker: {ticker}')
                  bad_tickers.append(ticker)
@@ -80,11 +80,11 @@ def get__NASDAQ_data_from_yahoo(reload_Nasdaq=False):
     if reload_Nasdaq:
         tickers = save_nasdaq_tickers()
     else:
-        with open("nasdaq_tickers.pickle", "rb") as f:
+        with open("C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/nasdaq_tickers.pickle", "rb") as f:
             tickers = pickle.load(f)
 
-    if not os.path.exists('stock_dfs'):
-        os.makedirs('stock_dfs')
+    if not os.path.exists('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs'):
+        os.makedirs('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs')
 
     start = begin
     end = today
@@ -93,14 +93,14 @@ def get__NASDAQ_data_from_yahoo(reload_Nasdaq=False):
 
     for ticker in tickers:
         print(ticker + '\n')
-        if not os.path.exists('stock_dfs/{}.csv'.format(ticker)):
+        if not os.path.exists('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/{}.csv'.format(ticker)):
             try:
                 df = web.DataReader(ticker , 'yahoo', start, end)
-                df['50ma'] = df['Adj Close'].rolling(window=50, min_periods=0).mean()
-                df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean()
-                df['200ma'] = df['Adj Close'].rolling(window=200, min_periods=0).mean()
+                df['50ma'] = df['Adj Close'].rolling(window=50, min_periods=0).mean().round(2)
+                df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean().round(2)
+                df['200ma'] = df['Adj Close'].rolling(window=200, min_periods=0).mean().round(2)
                 df['Symbol'] = ticker
-                df.to_csv('stock_dfs/{}.csv'.format(ticker))
+                df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs/{}.csv'.format(ticker))
             except Exception as e:
                  print(f'Bad Ticker: {ticker}')
                  bad_tickers.append(ticker)
@@ -109,7 +109,7 @@ def get__NASDAQ_data_from_yahoo(reload_Nasdaq=False):
             print('Already have {}'.format(ticker))
 
 def compile_data_long():
-    path = 'C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/stock_dfs'
+    path = 'C:/Users/us52873/Documents/Personal/investing/data_files/stock_dfs'
 
     filenames= glob.glob(path+ "/*.csv")
 
@@ -123,11 +123,11 @@ def compile_data_long():
 
     print(frame.shape)
 
-    frame.to_csv('final_df.csv', index=False, encoding='utf-8')
+    frame.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/final_df.csv', index=False, encoding='utf-8')
 
 def group_and_calculate():
 
-    df = pd.read_csv('C:/Users/us52873/Documents/Personal/investing/ETL_Scripts/final_df.csv')
+    df = pd.read_csv('C:/Users/us52873/Documents/Personal/investing/data_files/final_df.csv')
 
     df = df.sort_values('Date').groupby('Symbol').tail(2)
 
@@ -165,7 +165,7 @@ def group_and_calculate():
         # if same_symbol and not changed_status:
         #     print(row['Symbol'])
 
-    df.to_csv('grouped_df.csv', index=False, encoding='utf-8')
+    df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/grouped_df.csv', index=False, encoding='utf-8')
 
     df = df.loc[df.Indicator == 'Flash']
 
@@ -182,18 +182,31 @@ def group_and_calculate():
 
     df['Narrative'] = df.apply(classify, axis=1)
 
-    df.to_csv('detected_crosses_in_moving_avg.csv', encoding='utf-8', index=False)
+    df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/detected_crosses_in_moving_avg.csv', encoding='utf-8', index=False)
 
-# save_nasdaq_tickers()
-#
-# get__sp500_data_from_yahoo()
-# get__NASDAQ_data_from_yahoo()
-# print('============')
-# compile_data_long()
-# print('============')
-# group_and_calculate()
-# compile_data_fat()
-# save_sp500_tickers()
+def add_to_historical_file():
+
+    df_current = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/detected_crosses_in_moving_avg.csv")
+    df_historical = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/historical_moving_avg_cross.csv")
+
+    cols = df_historical.columns
+
+    current_values = df_current.values.tolist()
+    historical_values = df_historical.values.tolist()
+
+    rows_to_add = []
+
+    for row in current_values:
+        if row in historical_values:
+            continue
+        else:
+            rows_to_add.append(row)
+
+    append_df = pd.DataFrame(columns=cols, data=rows_to_add)
+
+    df_historical = pd.concat([df_historical, append_df])
+
+    df_historical.to_csv("C:/Users/us52873/Documents/Personal/investing/data_files/historical_moving_avg_cross.csv", encoding='utf-8', index=False)
 
 def compile_data_fat():
     with open("sp500_tickers.pickle", "rb") as f:
@@ -201,7 +214,7 @@ def compile_data_fat():
 
     main_df = pd.DataFrame()
 
-    for count,ticker in enumerate(tickers):
+    for count, ticker in enumerate(tickers):
         try:
             df = pd.read_csv('stock_dfs/{}.csv'.format(ticker))
             df.set_index('Date', inplace=True)

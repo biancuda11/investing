@@ -4,10 +4,11 @@ from datetime import datetime
 scripts = [ 'ETL_Scripts/clear_directory_archive.py',
             'ETL_Scripts/fetching_data.py',
             'ETL_Scripts/compile_and_group_data.py',
+            'ETL_Scripts/log_historical_changes.py',
             'Email_Scripts/moving_average_cross_email.py',
 ]
 
-python_dir = 'C:/Users/us52873/Documents/Personal/investing'
+python_dir = 'C:/Users/us52873/Documents/Personal/investing/'
 
 for script in scripts:
     print('Start: ', script)
