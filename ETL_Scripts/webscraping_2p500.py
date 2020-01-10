@@ -156,11 +156,12 @@ def group_and_calculate():
 
         symbol = row['Symbol']
         rating = row['Buy_Sell']
+        indicator_index = df.columns.get_loc('Buy_Sell')
 
         if i == 0:
             continue
         else:
-            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, 15]:
+            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, indicator_index]:
                 df.loc[i, 'Indicator'] = 'Flash'
                 print('Crossover Detected: ',row['Symbol'])
 
@@ -210,11 +211,12 @@ def group_and_calculate_thru100day():
 
         symbol = row['Symbol']
         rating = row['Buy_Sell']
+        indicator_index = df.columns.get_loc('Buy_Sell')
 
         if i == 0:
             continue
         else:
-            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, 15]:
+            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, indicator_index]:
                 df.loc[i, 'Indicator'] = 'Flash'
                 print('Price Puncture Detected: ',row['Symbol'])
 

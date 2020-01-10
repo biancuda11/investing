@@ -9,6 +9,8 @@ df_receivers = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/recipi
 
 df = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/detected_crosses_in_moving_avg.csv")
 
+df_100day = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/detected_price_thru_100day.csv")
+
 date = dt.datetime.now().date()
 
 to_list = ['AlohaAlerts11@gmail.com']
@@ -29,13 +31,20 @@ custom_cells = {'Buy_Sell': format_cells}
 
 custom_styles = 'th{background-color: #22767C;}'
 
-html_table = make_table(df, col_classes=classes, columns=['Symbol', 'Buy_Sell', 'Narrative'], styles=custom_styles, cell_classes=custom_cells)
+def create_html_table(df):
 
-html_table_transform = transform(html_table)
+    html_table = make_table(df, col_classes=classes, columns=['Symbol','Name', 'Sector', 'Industry' , 'Buy_Sell', 'Narrative'], styles=custom_styles, cell_classes=custom_cells)
+
+    html_table_transform = transform(html_table)
+
+    return html_table_transform
+
+table_moving_avg_cross = create_html_table(df)
+html_table_100day = create_html_table(df_100day)
 
 html = open("C:/Users/us52873/Documents/Personal/investing/Email_Scripts/html_files/Moving_Average_trigger.html", "r").read()
 
-html_formatted = html.format(name='Gang', table=html_table_transform)
+html_formatted = html.format(name='Gang', table=table_moving_avg_cross, table_100day=html_table_100day)
 
 s, logger, log_capture_string = sendemail.open_conn()
 
