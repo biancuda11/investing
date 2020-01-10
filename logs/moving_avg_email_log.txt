@@ -54,3 +54,23 @@
 2020-01-03 22:54:33,899: Log: INFO, GMAIL connection Success
 2020-01-03 22:54:35,784: Log: INFO, SUCCESS
 2020-01-03 22:54:35,867: Log: INFO, Close Connection Success
+============
+2020-01-06 21:09:05,196: Log: INFO, GMAIL connection Success
+2020-01-06 21:09:07,357: Log: INFO, SUCCESS
+2020-01-06 21:09:07,443: Log: INFO, Close Connection Success
+============
+2020-01-07 21:34:00,979: Log: INFO, GMAIL connection Success
+2020-01-07 21:34:02,745: Log: INFO, SUCCESS
+2020-01-07 21:34:02,828: Log: INFO, Close Connection Success
+============
+2020-01-07 22:10:11,745: Log: INFO, GMAIL connection Success
+2020-01-07 22:10:13,540: Log: INFO, SUCCESS
+2020-01-07 22:10:13,627: Log: INFO, Close Connection Success
+============
+2020-01-08 21:05:38,182: Log: INFO, GMAIL connection Success
+2020-01-08 21:05:43,899: Log: INFO, SUCCESS
+2020-01-08 21:05:43,987: Log: INFO, Close Connection Success
+============
+2020-01-08 21:42:17,565: Log: INFO, GMAIL connection Success
+2020-01-08 21:42:19,662: Log: INFO, SUCCESS
+2020-01-08 21:42:19,746: Log: INFO, Close Connection Success

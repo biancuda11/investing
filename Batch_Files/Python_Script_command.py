@@ -1,7 +1,8 @@
 import subprocess
 from datetime import datetime
 
-scripts = [ 'ETL_Scripts/clear_directory_archive.py',
+scripts = [ 'ETL_Scripts/clear_archives.py',
+            'ETL_Scripts/clear_directory_archive.py',
             'ETL_Scripts/fetching_data.py',
             'ETL_Scripts/compile_and_group_data.py',
             'ETL_Scripts/log_historical_changes.py',
