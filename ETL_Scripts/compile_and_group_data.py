@@ -8,5 +8,7 @@ scrape.compile_data_long()
 
 scrape.group_and_calculate()
 
+scrape.group_and_calculate_thru100day()
+
 print('DONE: Data Successfully Compiled and Grouped')
 print('===========')

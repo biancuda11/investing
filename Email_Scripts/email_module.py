@@ -60,9 +60,9 @@ def send_moving_average_email(text, html, s, logger, string, to_list, cc_list, b
         msg['Bcc'] = ",".join(bcc_list)
         msg.attach(MIMEText(text, 'plain'))
         msg.attach(MIMEText(html, 'html'))
-        receivers = to_list + cc_list + bcc_list
+        # receivers = to_list + cc_list + bcc_list
         print('Ready to send Email')
-        # receivers = ["biancuda11@gmail.com"] ## KEEP FOR TESTING
+        receivers = ["biancuda11@gmail.com"] ## KEEP FOR TESTING
         s.sendmail(username, receivers, msg.as_string())
         return "SUCCESS"
     except Exception as e:

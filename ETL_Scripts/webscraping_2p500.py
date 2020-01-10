@@ -123,6 +123,12 @@ def compile_data_long():
 
     print(frame.shape)
 
+    df_mapping = pd.read_csv("C:/Users/us52873/Documents/Personal/investing_data_files/ticker_mapping.csv")
+
+    df_mapping = df_mapping[['Ticker', 'Name', 'Sector', 'Industry']]
+
+    frame = frame.merge(df_mapping, how='left', left_on='Symbol', right_on='Ticker')
+
     frame.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/final_df.csv', index=False, encoding='utf-8')
 
 def group_and_calculate():
@@ -150,20 +156,16 @@ def group_and_calculate():
 
         symbol = row['Symbol']
         rating = row['Buy_Sell']
+        indicator_index = df.columns.get_loc('Buy_Sell')
 
         if i == 0:
             continue
         else:
-            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, 11]:
+            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, indicator_index]:
                 df.loc[i, 'Indicator'] = 'Flash'
                 print('Crossover Detected: ',row['Symbol'])
 
         insert_index += 1
-        # same_symbol = row['Symbol'] == df.iloc[i-1]
-        # changed_status = row['Buy_Sell'] != df.iloc[i-1, 1]
-
-        # if same_symbol and not changed_status:
-        #     print(row['Symbol'])
 
     df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/grouped_df.csv', index=False, encoding='utf-8')
 
@@ -184,10 +186,65 @@ def group_and_calculate():
 
     df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/detected_crosses_in_moving_avg.csv', encoding='utf-8', index=False)
 
-def add_to_historical_file():
+def group_and_calculate_thru100day():
 
-    df_current = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/detected_crosses_in_moving_avg.csv")
-    df_historical = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/historical_moving_avg_cross.csv")
+    df = pd.read_csv('C:/Users/us52873/Documents/Personal/investing/data_files/final_df.csv')
+
+    df = df.sort_values('Date').groupby('Symbol').tail(2)
+
+    def above_100(row):
+
+        if row['Adj Close'] > row['100ma']:
+            return 'BUY'
+        else:
+            return 'SELL'
+
+    df['Buy_Sell'] = df.apply(above_100,axis=1)
+
+    df = df.sort_values(['Symbol', 'Date'], ascending=True)
+
+    df['Indicator'] = 'N/A'
+
+    insert_index = 0
+
+    for i, row in df.iterrows():
+
+        symbol = row['Symbol']
+        rating = row['Buy_Sell']
+        indicator_index = df.columns.get_loc('Buy_Sell')
+
+        if i == 0:
+            continue
+        else:
+            if symbol == df.iloc[insert_index - 1, 10] and rating != df.iloc[insert_index - 1, indicator_index]:
+                df.loc[i, 'Indicator'] = 'Flash'
+                print('Price Puncture Detected: ',row['Symbol'])
+
+        insert_index += 1
+
+    df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/price_thru_100d_grouped_df.csv', index=False, encoding='utf-8')
+
+    df = df.loc[df.Indicator == 'Flash']
+
+    def classify(row):
+
+        template = 'Price now {above_below} 100 day (${hundred}). {indicator} Indicator, {rating} Rating'
+
+        if row['Buy_Sell'] == 'BUY':
+            return template.format(hundred=row['100ma'], above_below='above', indicator='BULLISH', rating='BUY')
+        elif row['Buy_Sell'] == 'SELL':
+            return template.format(hundred=row['100ma'], above_below='below', indicator='BEARISH', rating='SELL')
+        else:
+            return '## ERROR ##'
+
+    df['Narrative'] = df.apply(classify, axis=1)
+
+    df.to_csv('C:/Users/us52873/Documents/Personal/investing/data_files/detected_price_thru_100day.csv', encoding='utf-8', index=False)
+
+def add_to_historical_file(csv_current, csv_historical):
+
+    df_current = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/{csv_current}.csv".format(csv_current=csv_current))
+    df_historical = pd.read_csv("C:/Users/us52873/Documents/Personal/investing/data_files/{csv_historical}.csv".format(csv_historical=csv_historical))
 
     cols = df_historical.columns
 
@@ -202,11 +259,13 @@ def add_to_historical_file():
         else:
             rows_to_add.append(row)
 
-    append_df = pd.DataFrame(columns=cols, data=rows_to_add)
+    if len(rows_to_add) > 0:
+        print('Adding {} rows'.format(len(rows_to_add)))
+        append_df = pd.DataFrame(columns=cols, data=rows_to_add)
 
-    df_historical = pd.concat([df_historical, append_df])
+        df_historical = pd.concat([df_historical, append_df])
 
-    df_historical.to_csv("C:/Users/us52873/Documents/Personal/investing/data_files/historical_moving_avg_cross.csv", encoding='utf-8', index=False)
+    df_historical.to_csv("C:/Users/us52873/Documents/Personal/investing/data_files/{csv_historical}.csv".format(csv_historical=csv_historical), encoding='utf-8', index=False)
 
 def compile_data_fat():
     with open("sp500_tickers.pickle", "rb") as f:
